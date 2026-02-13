@@ -126,6 +126,7 @@ type EngineConfig struct {
 
 	DisableClientRoutes bool
 	DisableServerRoutes bool
+	DisableDefaultRoute bool
 	DisableDNS          bool
 	DisableFirewall     bool
 	BlockLANAccess      bool
