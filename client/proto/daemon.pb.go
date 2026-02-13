@@ -4144,6 +4144,7 @@ type SetConfigRequest struct {
 	EnableSSHRemotePortForwarding *bool                `protobuf:"varint,32,opt,name=enableSSHRemotePortForwarding,proto3,oneof" json:"enableSSHRemotePortForwarding,omitempty"`
 	DisableSSHAuth                *bool                `protobuf:"varint,33,opt,name=disableSSHAuth,proto3,oneof" json:"disableSSHAuth,omitempty"`
 	SshJWTCacheTTL                *int32               `protobuf:"varint,34,opt,name=sshJWTCacheTTL,proto3,oneof" json:"sshJWTCacheTTL,omitempty"`
+	DisableDefaultRoute           *bool                `protobuf:"varint,35,opt,name=disable_default_route,json=disableDefaultRoute,proto3,oneof" json:"disable_default_route,omitempty"`
 	unknownFields                 protoimpl.UnknownFields
 	sizeCache                     protoimpl.SizeCache
 }
@@ -4414,6 +4415,13 @@ func (x *SetConfigRequest) GetSshJWTCacheTTL() int32 {
 		return *x.SshJWTCacheTTL
 	}
 	return 0
+}
+
+func (x *SetConfigRequest) GetDisableDefaultRoute() bool {
+	if x != nil && x.DisableDefaultRoute != nil {
+		return *x.DisableDefaultRoute
+	}
+	return false
 }
 
 type SetConfigResponse struct {
@@ -6287,7 +6295,7 @@ const file_daemon_proto_rawDesc = "" +
 	"\busername\x18\x02 \x01(\tH\x01R\busername\x88\x01\x01B\x0e\n" +
 	"\f_profileNameB\v\n" +
 	"\t_username\"\x17\n" +
-	"\x15SwitchProfileResponse\"\xdf\x10\n" +
+	"\x15SwitchProfileResponse\"\xb2\x11\n" +
 	"\x10SetConfigRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12 \n" +
 	"\vprofileName\x18\x02 \x01(\tR\vprofileName\x12$\n" +
@@ -6326,7 +6334,8 @@ const file_daemon_proto_rawDesc = "" +
 	"\x1cenableSSHLocalPortForwarding\x18\x1f \x01(\bH\x14R\x1cenableSSHLocalPortForwarding\x88\x01\x01\x12I\n" +
 	"\x1denableSSHRemotePortForwarding\x18  \x01(\bH\x15R\x1denableSSHRemotePortForwarding\x88\x01\x01\x12+\n" +
 	"\x0edisableSSHAuth\x18! \x01(\bH\x16R\x0edisableSSHAuth\x88\x01\x01\x12+\n" +
-	"\x0esshJWTCacheTTL\x18\" \x01(\x05H\x17R\x0esshJWTCacheTTL\x88\x01\x01B\x13\n" +
+	"\x0esshJWTCacheTTL\x18\" \x01(\x05H\x17R\x0esshJWTCacheTTL\x88\x01\x01\x127\n" +
+	"\x15disable_default_route\x18# \x01(\bH\x18R\x13disableDefaultRoute\x88\x01\x01B\x13\n" +
 	"\x11_rosenpassEnabledB\x10\n" +
 	"\x0e_interfaceNameB\x10\n" +
 	"\x0e_wireguardPortB\x17\n" +
@@ -6350,7 +6359,8 @@ const file_daemon_proto_rawDesc = "" +
 	"\x1d_enableSSHLocalPortForwardingB \n" +
 	"\x1e_enableSSHRemotePortForwardingB\x11\n" +
 	"\x0f_disableSSHAuthB\x11\n" +
-	"\x0f_sshJWTCacheTTL\"\x13\n" +
+	"\x0f_sshJWTCacheTTLB\x18\n" +
+	"\x16_disable_default_route\"\x13\n" +
 	"\x11SetConfigResponse\"Q\n" +
 	"\x11AddProfileRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12 \n" +
