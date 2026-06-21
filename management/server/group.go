@@ -602,11 +602,13 @@ func (am *DefaultAccountManager) GroupDeleteResource(ctx context.Context, accoun
 
 // validateNewGroup validates the new group for existence and required fields.
 func validateNewGroup(ctx context.Context, transaction store.Store, accountID string, newGroup *types.Group) error {
-	if newGroup.ID == "" && newGroup.Issued != types.GroupIssuedAPI {
-		return status.Errorf(status.InvalidArgument, "%s group without ID set", newGroup.Issued)
-	}
+	if newGroup.ID == "" {
+		// Integration groups require a pre-set ID tied to their integration
+		// reference; they are the only issued type that cannot be minted via the API.
+		if newGroup.Issued == types.GroupIssuedIntegration {
+			return status.Errorf(status.InvalidArgument, "%s group without ID set", newGroup.Issued)
+		}
 
-	if newGroup.ID == "" && newGroup.Issued == types.GroupIssuedAPI {
 		existingGroup, err := transaction.GetGroupByName(ctx, store.LockingStrengthNone, accountID, newGroup.Name)
 		if err != nil {
 			if s, ok := status.FromError(err); !ok || s.Type() != status.NotFound {
@@ -614,8 +616,9 @@ func validateNewGroup(ctx context.Context, transaction store.Store, accountID st
 			}
 		}
 
-		// Prevent duplicate groups for API-issued groups.
-		// Integration or JWT groups can be duplicated as they are coming from the IdP that we don't have control of.
+		// Prevent duplicate api- and jwt-issued groups created via the API. IdP-driven
+		// JWT sync assigns users to a matching jwt-issued group by name, so a duplicate
+		// here would shadow the API-created group.
 		if existingGroup != nil {
 			return status.Errorf(status.AlreadyExists, "group with name %s already exists", newGroup.Name)
 		}
