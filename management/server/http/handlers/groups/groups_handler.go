@@ -203,6 +203,15 @@ func (h *handler) createGroup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	issued := types.GroupIssuedAPI
+	if req.Issued != nil && *req.Issued != "" {
+		if !req.Issued.Valid() {
+			util.WriteError(r.Context(), status.Errorf(status.InvalidArgument, "invalid issued value: %s", *req.Issued), w)
+			return
+		}
+		issued = string(*req.Issued)
+	}
+
 	var peers []string
 	if req.Peers == nil {
 		peers = make([]string, 0)
@@ -223,7 +232,7 @@ func (h *handler) createGroup(w http.ResponseWriter, r *http.Request) {
 		Name:      req.Name,
 		Peers:     peers,
 		Resources: resources,
-		Issued:    types.GroupIssuedAPI,
+		Issued:    issued,
 	}
 
 	err = h.accountManager.CreateGroup(r.Context(), accountID, userID, &group)
