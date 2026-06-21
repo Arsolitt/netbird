@@ -509,6 +509,24 @@ func (e GroupMinimumIssued) Valid() bool {
 	}
 }
 
+// Defines values for GroupRequestIssued.
+const (
+	GroupRequestIssuedApi GroupRequestIssued = "api"
+	GroupRequestIssuedJwt GroupRequestIssued = "jwt"
+)
+
+// Valid indicates whether the value is a known member of the GroupRequestIssued enum.
+func (e GroupRequestIssued) Valid() bool {
+	switch e {
+	case GroupRequestIssuedApi:
+		return true
+	case GroupRequestIssuedJwt:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for IdentityProviderType.
 const (
 	IdentityProviderTypeAdfs      IdentityProviderType = "adfs"
@@ -2307,6 +2325,13 @@ type GroupMinimumIssued string
 
 // GroupRequest defines model for GroupRequest.
 type GroupRequest struct {
+	// Issued Group origin. When set to "jwt", the group is created with the JWT-synced
+	// source so that IdP users carrying this group name in the JWT `groups`
+	// claim are attached to it at login. Defaults to "api". Only "api" and
+	// "jwt" are accepted via this endpoint; "integration" is reserved for
+	// SCIM/IdP-driven provisioning.
+	Issued *GroupRequestIssued `json:"issued,omitempty"`
+
 	// Name Group name identifier
 	Name string `json:"name"`
 
@@ -2314,6 +2339,13 @@ type GroupRequest struct {
 	Peers     *[]string   `json:"peers,omitempty"`
 	Resources *[]Resource `json:"resources,omitempty"`
 }
+
+// GroupRequestIssued Group origin. When set to "jwt", the group is created with the JWT-synced
+// source so that IdP users carrying this group name in the JWT `groups`
+// claim are attached to it at login. Defaults to "api". Only "api" and
+// "jwt" are accepted via this endpoint; "integration" is reserved for
+// SCIM/IdP-driven provisioning.
+type GroupRequestIssued string
 
 // HeaderAuthConfig Static header-value authentication. The proxy checks that the named header matches the configured value.
 type HeaderAuthConfig struct {
