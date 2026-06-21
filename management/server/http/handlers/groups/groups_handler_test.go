@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/netip"
 	"net/http/httptest"
+	"net/netip"
 	"strings"
 	"testing"
 
@@ -251,6 +251,38 @@ func TestWriteGroup(t *testing.T) {
 				Name:   "changed",
 				Issued: (*api.GroupIssued)(&groupIssuedJWT),
 			},
+		},
+		{
+			name:        "Write Group POST with issued jwt",
+			requestType: http.MethodPost,
+			requestPath: "/api/groups",
+			requestBody: bytes.NewBuffer(
+				[]byte(`{"name":"Pre-Provisioned JWT Group","issued":"jwt"}`)),
+			expectedStatus: http.StatusOK,
+			expectedBody:   true,
+			expectedGroup: &api.Group{
+				Id:     "id-was-set",
+				Name:   "Pre-Provisioned JWT Group",
+				Issued: (*api.GroupIssued)(&groupIssuedJWT),
+			},
+		},
+		{
+			name:        "Write Group POST rejects invalid issued",
+			requestType: http.MethodPost,
+			requestPath: "/api/groups",
+			requestBody: bytes.NewBuffer(
+				[]byte(`{"name":"Bad Issued","issued":"bogus"}`)),
+			expectedStatus: http.StatusUnprocessableEntity,
+			expectedBody:   false,
+		},
+		{
+			name:        "Write Group POST rejects integration issued",
+			requestType: http.MethodPost,
+			requestPath: "/api/groups",
+			requestBody: bytes.NewBuffer(
+				[]byte(`{"name":"Integration Try","issued":"integration"}`)),
+			expectedStatus: http.StatusUnprocessableEntity,
+			expectedBody:   false,
 		},
 	}
 
