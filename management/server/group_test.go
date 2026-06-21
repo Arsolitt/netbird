@@ -75,6 +75,45 @@ func TestDefaultAccountManager_CreateGroup(t *testing.T) {
 	}
 }
 
+func TestDefaultAccountManager_CreateGroup_JWTViaAPI(t *testing.T) {
+	am, _, err := createManager(t)
+	if err != nil {
+		t.Fatalf("failed to create account manager: %s", err)
+	}
+
+	_, account, err := initTestGroupAccount(am)
+	if err != nil {
+		t.Fatalf("failed to init testing account: %s", err)
+	}
+
+	// A jwt-issued group created via the API with no pre-set ID gets an ID minted
+	// and is persisted, so it can be referenced by policies/routes ahead of any IdP login.
+	jwtGroup := &types.Group{
+		Name:   "jwt-via-api-group",
+		Issued: types.GroupIssuedJWT,
+	}
+	err = am.CreateGroup(context.Background(), account.Id, groupAdminUserID, jwtGroup)
+	require.NoError(t, err, "should mint ID and create jwt-issued group via API")
+	require.NotEmpty(t, jwtGroup.ID, "minted ID should be set on the group")
+
+	// Duplicate name (any issued type) is rejected, so the API-created jwt group
+	// shadows any later IdP-synced group of the same name instead of being shadowed.
+	dup := &types.Group{
+		Name:   "jwt-via-api-group",
+		Issued: types.GroupIssuedJWT,
+	}
+	err = am.CreateGroup(context.Background(), account.Id, groupAdminUserID, dup)
+	require.Error(t, err, "should reject duplicate group name")
+
+	// Integration-issued groups cannot be minted via the API; they need a pre-set ID.
+	integrationNoID := &types.Group{
+		Name:   "integration-via-api-group",
+		Issued: types.GroupIssuedIntegration,
+	}
+	err = am.CreateGroup(context.Background(), account.Id, groupAdminUserID, integrationNoID)
+	require.Error(t, err, "should reject integration group without pre-set ID")
+}
+
 func TestDefaultAccountManager_DeleteGroup(t *testing.T) {
 	am, _, err := createManager(t)
 	if err != nil {
