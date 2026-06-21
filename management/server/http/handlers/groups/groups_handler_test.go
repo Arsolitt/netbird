@@ -44,9 +44,10 @@ func initGroupTestData(initGroups ...*types.Group) *handler {
 			},
 			GetGroupFunc: func(_ context.Context, _, groupID, _ string) (*types.Group, error) {
 				groups := map[string]*types.Group{
-					"id-jwt-group": {ID: "id-jwt-group", Name: "From JWT", Issued: types.GroupIssuedJWT},
-					"id-existed":   {ID: "id-existed", Peers: []string{"A", "B"}, Issued: types.GroupIssuedAPI},
-					"id-all":       {ID: "id-all", Name: "All", Issued: types.GroupIssuedAPI},
+					"id-jwt-group":   {ID: "id-jwt-group", Name: "From JWT", Issued: types.GroupIssuedJWT},
+					"id-existed":     {ID: "id-existed", Peers: []string{"A", "B"}, Issued: types.GroupIssuedAPI},
+					"id-all":         {ID: "id-all", Name: "All", Issued: types.GroupIssuedAPI},
+					"id-integration": {ID: "id-integration", Name: "From Integration", Issued: types.GroupIssuedIntegration},
 				}
 
 				for _, group := range initGroups {
@@ -64,7 +65,7 @@ func initGroupTestData(initGroups ...*types.Group) *handler {
 				groups := []*types.Group{
 					{ID: "id-jwt-group", Name: "From JWT", Issued: types.GroupIssuedJWT},
 					{ID: "id-existed", Name: "Existed", Peers: []string{"A", "B"}, Issued: types.GroupIssuedAPI},
-					{ID: "id-all", Name: "All", Issued: types.GroupIssuedAPI},
+					{ID: "id-integration", Name: "From Integration", Issued: types.GroupIssuedIntegration},
 				}
 
 				groups = append(groups, initGroups...)
@@ -240,7 +241,7 @@ func TestWriteGroup(t *testing.T) {
 			expectedBody:   false,
 		},
 		{
-			name:        "Write Group PUT not change Issue",
+			name:        "Write Group PUT converts jwt to api",
 			requestType: http.MethodPut,
 			requestPath: "/api/groups/id-jwt-group",
 			requestBody: bytes.NewBuffer(
@@ -249,8 +250,52 @@ func TestWriteGroup(t *testing.T) {
 			expectedGroup: &api.Group{
 				Id:     "id-jwt-group",
 				Name:   "changed",
+				Issued: (*api.GroupIssued)(&groupIssuedAPI),
+			},
+		},
+		{
+			name:        "Write Group PUT converts api to jwt",
+			requestType: http.MethodPut,
+			requestPath: "/api/groups/id-existed",
+			requestBody: bytes.NewBuffer(
+				[]byte(`{"Name":"switched","Issued":"jwt"}`)),
+			expectedStatus: http.StatusOK,
+			expectedGroup: &api.Group{
+				Id:     "id-existed",
+				Name:   "switched",
 				Issued: (*api.GroupIssued)(&groupIssuedJWT),
 			},
+		},
+		{
+			name:        "Write Group PUT keeps issued when omitted",
+			requestType: http.MethodPut,
+			requestPath: "/api/groups/id-jwt-group",
+			requestBody: bytes.NewBuffer(
+				[]byte(`{"Name":"renamed"}`)),
+			expectedStatus: http.StatusOK,
+			expectedGroup: &api.Group{
+				Id:     "id-jwt-group",
+				Name:   "renamed",
+				Issued: (*api.GroupIssued)(&groupIssuedJWT),
+			},
+		},
+		{
+			name:        "Write Group PUT rejects issued change on integration group",
+			requestType: http.MethodPut,
+			requestPath: "/api/groups/id-integration",
+			requestBody: bytes.NewBuffer(
+				[]byte(`{"Name":"try","Issued":"api"}`)),
+			expectedStatus: http.StatusForbidden,
+			expectedBody:   false,
+		},
+		{
+			name:        "Write Group PUT rejects invalid issued",
+			requestType: http.MethodPut,
+			requestPath: "/api/groups/id-existed",
+			requestBody: bytes.NewBuffer(
+				[]byte(`{"Name":"bad","Issued":"bogus"}`)),
+			expectedStatus: http.StatusUnprocessableEntity,
+			expectedBody:   false,
 		},
 		{
 			name:        "Write Group POST with issued jwt",

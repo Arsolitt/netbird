@@ -141,6 +141,19 @@ func (h *handler) updateGroup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	issued := existingGroup.Issued
+	if req.Issued != nil && *req.Issued != "" {
+		if !req.Issued.Valid() {
+			util.WriteError(r.Context(), status.Errorf(status.InvalidArgument, "invalid issued value: %s", *req.Issued), w)
+			return
+		}
+		if existingGroup.Issued == types.GroupIssuedIntegration {
+			util.WriteError(r.Context(), status.Errorf(status.PermissionDenied, "cannot change issued for integration-managed group"), w)
+			return
+		}
+		issued = string(*req.Issued)
+	}
+
 	var peers []string
 	if req.Peers == nil {
 		peers = make([]string, 0)
@@ -162,7 +175,7 @@ func (h *handler) updateGroup(w http.ResponseWriter, r *http.Request) {
 		Name:                 req.Name,
 		Peers:                peers,
 		Resources:            resources,
-		Issued:               existingGroup.Issued,
+		Issued:               issued,
 		IntegrationReference: existingGroup.IntegrationReference,
 	}
 
