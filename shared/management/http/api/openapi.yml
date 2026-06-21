@@ -1318,6 +1318,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Resource'
+        issued:
+          description: |
+            Group origin. When set to "jwt", the group is created with the JWT-synced
+            source so that IdP users carrying this group name in the JWT `groups`
+            claim are attached to it at login. Defaults to "api". Only "api" and
+            "jwt" are accepted via this endpoint; "integration" is reserved for
+            SCIM/IdP-driven provisioning.
+          type: string
+          enum: [ "api", "jwt" ]
+          default: api
+          example: api
       required:
         - name
     Group:
