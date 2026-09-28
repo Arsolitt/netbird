@@ -3395,6 +3395,12 @@ type GroupRequest struct {
 	// claim are attached to it at login. Defaults to "api". Only "api" and
 	// "jwt" are accepted via this endpoint; "integration" is reserved for
 	// SCIM/IdP-driven provisioning.
+	//
+	// Changing the origin of an existing group moves its membership to the
+	// other side, effective from the next login: a group changed to "jwt" is
+	// reconciled against the IdP claim, so members the claim does not list
+	// lose the group, while a group changed to "api" keeps its current members
+	// and is no longer reconciled.
 	Issued *GroupRequestIssued `json:"issued,omitempty"`
 
 	// Name Group name identifier
@@ -3410,6 +3416,12 @@ type GroupRequest struct {
 // claim are attached to it at login. Defaults to "api". Only "api" and
 // "jwt" are accepted via this endpoint; "integration" is reserved for
 // SCIM/IdP-driven provisioning.
+//
+// Changing the origin of an existing group moves its membership to the
+// other side, effective from the next login: a group changed to "jwt" is
+// reconciled against the IdP claim, so members the claim does not list
+// lose the group, while a group changed to "api" keeps its current members
+// and is no longer reconciled.
 type GroupRequestIssued string
 
 // HeaderAuthConfig Static header-value authentication. The proxy checks that the named header matches the configured value.

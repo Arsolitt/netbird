@@ -141,6 +141,9 @@ func (h *handler) updateGroup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Changing the origin hands membership to the other side: "jwt" groups are
+	// reconciled against the IdP claim on every login, "api" groups are never
+	// reconciled and keep the members they have.
 	issued := existingGroup.Issued
 	if req.Issued != nil && *req.Issued != "" {
 		if !req.Issued.Valid() {
