@@ -1,0 +1,455 @@
+netbird (Arsolitt fork)
+=======================
+
+This repository is a fork of https://github.com/netbirdio/netbird with its own
+release pipeline. The released artifacts are the netbird client binary for
+linux/amd64 and the linux/amd64 container images netbird-management,
+netbird-signal, netbird-relay and netbird-server (the combined management,
+signal and relay server). This file lists the third-party components linked
+into those artifacts together with the license files they ship; the full text
+of every third-party license is bundled in third_party_licenses/ next to this
+file.
+
+The fork keeps the upstream licensing split: BSD-3-Clause for most of the
+repository (including the client binary) and AGPL-3.0-only for management/,
+signal/, relay/, combined/, proxy/ and tools/idp-migrate/ (see LICENSE and
+LICENSES/). The corresponding source for every released binary and image is
+this repository at the matching release tag.
+
+The server images are built FROM ubuntu:24.04 (management, combined) and
+distroless static-debian12 (signal, relay) base images. The base-image package
+licenses apply to those packages only; they are not linked into the Go
+binaries.
+
+Third-party components
+======================
+
+cloud.google.com/go/auth v0.20.0 — Apache-2.0 — third_party_licenses/cloud.google.com/go/auth/LICENSE
+cloud.google.com/go/auth/oauth2adapt v0.2.8 — Apache-2.0 — third_party_licenses/cloud.google.com/go/auth/oauth2adapt/LICENSE
+cloud.google.com/go/compute/metadata v0.9.0 — Apache-2.0 — third_party_licenses/cloud.google.com/go/compute/metadata/LICENSE
+cunicu.li/go-rosenpass v0.5.42 — Apache-2.0 — third_party_licenses/cunicu.li/go-rosenpass/LICENSE
+dario.cat/mergo v1.0.1 — BSD-3-Clause — third_party_licenses/dario.cat/mergo/LICENSE
+filippo.io/edwards25519 v1.1.1 — BSD-3-Clause — third_party_licenses/filippo.io/edwards25519/LICENSE
+github.com/AppsFlyer/go-sundheit v0.6.0 — Apache-2.0 — third_party_licenses/github.com/AppsFlyer/go-sundheit/LICENSE
+github.com/Azure/go-ntlmssp v0.1.0 — MIT — third_party_licenses/github.com/Azure/go-ntlmssp/LICENSE
+github.com/BurntSushi/toml v1.5.0 — MIT — third_party_licenses/github.com/BurntSushi/toml/COPYING
+github.com/DeRuina/timberjack v1.4.2 — MIT — third_party_licenses/github.com/DeRuina/timberjack/LICENSE
+github.com/Masterminds/goutils v1.1.1 — Apache-2.0 — third_party_licenses/github.com/Masterminds/goutils/LICENSE.txt
+github.com/Masterminds/semver/v3 v3.3.0 — MIT — third_party_licenses/github.com/Masterminds/semver/v3/LICENSE.txt
+github.com/Masterminds/sprig/v3 v3.3.0 — MIT — third_party_licenses/github.com/Masterminds/sprig/v3/LICENSE.txt
+github.com/anmitsu/go-shlex v0.0.0-20200514113438-38f4b401e2be — MIT — third_party_licenses/github.com/anmitsu/go-shlex/LICENSE
+github.com/apapsch/go-jsonmerge/v2 v2.0.0 — MIT — third_party_licenses/github.com/apapsch/go-jsonmerge/v2/LICENSE
+github.com/awnumar/memcall v0.4.0 — Apache-2.0 — third_party_licenses/github.com/awnumar/memcall/LICENSE
+github.com/awnumar/memguard v0.23.0 — Apache-2.0 — third_party_licenses/github.com/awnumar/memguard/AUTHORS, third_party_licenses/github.com/awnumar/memguard/LICENSE
+github.com/aws/aws-sdk-go-v2 v1.38.3 — Apache-2.0 — third_party_licenses/github.com/aws/aws-sdk-go-v2/LICENSE.txt, third_party_licenses/github.com/aws/aws-sdk-go-v2/NOTICE.txt
+github.com/aws/aws-sdk-go-v2/config v1.31.6 — Apache-2.0 — third_party_licenses/github.com/aws/aws-sdk-go-v2/config/LICENSE.txt
+github.com/aws/aws-sdk-go-v2/credentials v1.18.10 — Apache-2.0 — third_party_licenses/github.com/aws/aws-sdk-go-v2/credentials/LICENSE.txt
+github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.6 — Apache-2.0 — third_party_licenses/github.com/aws/aws-sdk-go-v2/feature/ec2/imds/LICENSE.txt
+github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.6 — Apache-2.0 — third_party_licenses/github.com/aws/aws-sdk-go-v2/internal/configsources/LICENSE.txt
+github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.6 — Apache-2.0 — third_party_licenses/github.com/aws/aws-sdk-go-v2/internal/endpoints/v2/LICENSE.txt
+github.com/aws/aws-sdk-go-v2/internal/ini v1.8.3 — Apache-2.0 — third_party_licenses/github.com/aws/aws-sdk-go-v2/internal/ini/LICENSE.txt
+github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.1 — Apache-2.0 — third_party_licenses/github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding/LICENSE.txt
+github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.6 — Apache-2.0 — third_party_licenses/github.com/aws/aws-sdk-go-v2/service/internal/presigned-url/LICENSE.txt
+github.com/aws/aws-sdk-go-v2/service/route53 v1.42.3 — Apache-2.0 — third_party_licenses/github.com/aws/aws-sdk-go-v2/service/route53/LICENSE.txt
+github.com/aws/aws-sdk-go-v2/service/sso v1.29.1 — Apache-2.0 — third_party_licenses/github.com/aws/aws-sdk-go-v2/service/sso/LICENSE.txt
+github.com/aws/aws-sdk-go-v2/service/ssooidc v1.34.2 — Apache-2.0 — third_party_licenses/github.com/aws/aws-sdk-go-v2/service/ssooidc/LICENSE.txt
+github.com/aws/aws-sdk-go-v2/service/sts v1.38.2 — Apache-2.0 — third_party_licenses/github.com/aws/aws-sdk-go-v2/service/sts/LICENSE.txt
+github.com/aws/smithy-go v1.23.0 — Apache-2.0 — third_party_licenses/github.com/aws/smithy-go/LICENSE, third_party_licenses/github.com/aws/smithy-go/NOTICE
+github.com/beevik/etree v1.6.0 — BSD-2-Clause — third_party_licenses/github.com/beevik/etree/LICENSE
+github.com/beorn7/perks v1.0.1 — MIT — third_party_licenses/github.com/beorn7/perks/LICENSE
+github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc — MIT — third_party_licenses/github.com/boombuler/barcode/LICENSE
+github.com/c-robinson/iplib v1.0.3 — MIT — third_party_licenses/github.com/c-robinson/iplib/LICENSE
+github.com/caddyserver/certmagic v0.21.3 — Apache-2.0 — third_party_licenses/github.com/caddyserver/certmagic/LICENSE.txt
+github.com/caddyserver/zerossl v0.1.3 — MIT — third_party_licenses/github.com/caddyserver/zerossl/LICENSE
+github.com/cenkalti/backoff/v4 v4.3.0 — MIT — third_party_licenses/github.com/cenkalti/backoff/v4/LICENSE
+github.com/cespare/xxhash/v2 v2.3.0 — MIT — third_party_licenses/github.com/cespare/xxhash/v2/LICENSE.txt
+github.com/cilium/ebpf v0.19.0 — MIT — third_party_licenses/github.com/cilium/ebpf/LICENSE
+github.com/cloudflare/circl v1.3.3 — BSD-3-Clause — third_party_licenses/github.com/cloudflare/circl/LICENSE
+github.com/coder/websocket v1.8.14 — unknown — third_party_licenses/github.com/coder/websocket/LICENSE.txt
+github.com/containerd/log v0.1.0 — Apache-2.0 — third_party_licenses/github.com/containerd/log/LICENSE
+github.com/containerd/platforms v0.2.1 — Apache-2.0 — third_party_licenses/github.com/containerd/platforms/LICENSE
+github.com/coreos/go-iptables v0.7.0 — Apache-2.0 — third_party_licenses/github.com/coreos/go-iptables/LICENSE, third_party_licenses/github.com/coreos/go-iptables/NOTICE
+github.com/coreos/go-oidc/v3 v3.18.0 — Apache-2.0 — third_party_licenses/github.com/coreos/go-oidc/v3/LICENSE, third_party_licenses/github.com/coreos/go-oidc/v3/NOTICE
+github.com/cpuguy83/dockercfg v0.3.2 — MIT — third_party_licenses/github.com/cpuguy83/dockercfg/LICENSE
+github.com/creack/pty v1.1.24 — MIT — third_party_licenses/github.com/creack/pty/LICENSE
+github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc — ISC — third_party_licenses/github.com/davecgh/go-spew/LICENSE
+github.com/dexidp/dex v2.13.0+incompatible — Apache-2.0 — third_party_licenses/github.com/dexidp/dex/LICENSE
+github.com/dexidp/dex/api/v2 v2.4.0 — Apache-2.0 — third_party_licenses/github.com/dexidp/dex/api/v2/LICENSE
+github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f — MIT — third_party_licenses/github.com/dgryski/go-rendezvous/LICENSE
+github.com/distribution/reference v0.6.0 — Apache-2.0 — third_party_licenses/github.com/distribution/reference/LICENSE
+github.com/docker/docker v28.0.1+incompatible — Apache-2.0 — third_party_licenses/github.com/docker/docker/AUTHORS, third_party_licenses/github.com/docker/docker/LICENSE, third_party_licenses/github.com/docker/docker/NOTICE
+github.com/docker/go-connections v0.6.0 — Apache-2.0 — third_party_licenses/github.com/docker/go-connections/LICENSE
+github.com/docker/go-units v0.5.0 — Apache-2.0 — third_party_licenses/github.com/docker/go-units/LICENSE
+github.com/eko/gocache/lib/v4 v4.2.0 — MIT — third_party_licenses/github.com/eko/gocache/lib/v4/LICENSE
+github.com/eko/gocache/store/go_cache/v4 v4.2.2 — MIT — third_party_licenses/github.com/eko/gocache/store/go_cache/v4/LICENSE
+github.com/eko/gocache/store/redis/v4 v4.2.2 — MIT — third_party_licenses/github.com/eko/gocache/store/redis/v4/LICENSE
+github.com/felixge/httpsnoop v1.0.4 — MIT — third_party_licenses/github.com/felixge/httpsnoop/LICENSE.txt
+github.com/fsnotify/fsnotify v1.9.0 — BSD-3-Clause — third_party_licenses/github.com/fsnotify/fsnotify/LICENSE
+github.com/fxamacker/cbor/v2 v2.9.1 — MIT — third_party_licenses/github.com/fxamacker/cbor/v2/LICENSE
+github.com/gliderlabs/ssh v0.3.8 — BSD-3-Clause — third_party_licenses/github.com/gliderlabs/ssh/LICENSE
+github.com/go-asn1-ber/asn1-ber v1.5.8-0.20250403174932-29230038a667 — MIT — third_party_licenses/github.com/go-asn1-ber/asn1-ber/LICENSE
+github.com/go-jose/go-jose/v4 v4.1.4 — Apache-2.0 — third_party_licenses/github.com/go-jose/go-jose/v4/LICENSE
+github.com/go-ldap/ldap/v3 v3.4.13 — MIT — third_party_licenses/github.com/go-ldap/ldap/v3/LICENSE
+github.com/go-logr/logr v1.4.3 — Apache-2.0 — third_party_licenses/github.com/go-logr/logr/LICENSE
+github.com/go-logr/stdr v1.2.2 — Apache-2.0 — third_party_licenses/github.com/go-logr/stdr/LICENSE
+github.com/go-sql-driver/mysql v1.9.3 — MPL-2.0 — third_party_licenses/github.com/go-sql-driver/mysql/AUTHORS, third_party_licenses/github.com/go-sql-driver/mysql/LICENSE
+github.com/go-viper/mapstructure/v2 v2.5.0 — MIT — third_party_licenses/github.com/go-viper/mapstructure/v2/LICENSE
+github.com/go-webauthn/webauthn v0.16.4 — BSD-3-Clause — third_party_licenses/github.com/go-webauthn/webauthn/LICENSE
+github.com/go-webauthn/x v0.2.3 — BSD-3-Clause — third_party_licenses/github.com/go-webauthn/x/LICENSE
+github.com/goccy/go-yaml v1.18.0 — MIT — third_party_licenses/github.com/goccy/go-yaml/LICENSE
+github.com/godbus/dbus/v5 v5.1.0 — BSD-2-Clause — third_party_licenses/github.com/godbus/dbus/v5/LICENSE
+github.com/gogo/protobuf v1.3.2 — BSD-3-Clause — third_party_licenses/github.com/gogo/protobuf/AUTHORS, third_party_licenses/github.com/gogo/protobuf/LICENSE
+github.com/golang-jwt/jwt/v5 v5.3.1 — MIT — third_party_licenses/github.com/golang-jwt/jwt/v5/LICENSE
+github.com/golang/mock v1.6.0 — Apache-2.0 — third_party_licenses/github.com/golang/mock/AUTHORS, third_party_licenses/github.com/golang/mock/LICENSE
+github.com/golang/protobuf v1.5.4 — BSD-3-Clause — third_party_licenses/github.com/golang/protobuf/AUTHORS, third_party_licenses/github.com/golang/protobuf/LICENSE
+github.com/google/btree v1.1.3 — Apache-2.0 — third_party_licenses/github.com/google/btree/LICENSE
+github.com/google/go-tpm v0.9.8 — Apache-2.0 — third_party_licenses/github.com/google/go-tpm/LICENSE
+github.com/google/gopacket v1.1.19 — BSD-3-Clause — third_party_licenses/github.com/google/gopacket/AUTHORS, third_party_licenses/github.com/google/gopacket/LICENSE
+github.com/google/nftables v0.3.0 — Apache-2.0 — third_party_licenses/github.com/google/nftables/LICENSE
+github.com/google/s2a-go v0.1.9 — Apache-2.0 — third_party_licenses/github.com/google/s2a-go/LICENSE.md
+github.com/google/uuid v1.6.0 — BSD-3-Clause — third_party_licenses/github.com/google/uuid/LICENSE
+github.com/googleapis/enterprise-certificate-proxy v0.3.14 — Apache-2.0 — third_party_licenses/github.com/googleapis/enterprise-certificate-proxy/LICENSE
+github.com/googleapis/gax-go/v2 v2.21.0 — BSD-3-Clause — third_party_licenses/github.com/googleapis/gax-go/v2/LICENSE
+github.com/gopacket/gopacket v1.4.0 — BSD-3-Clause — third_party_licenses/github.com/gopacket/gopacket/AUTHORS, third_party_licenses/github.com/gopacket/gopacket/LICENSE
+github.com/gorilla/handlers v1.5.2 — BSD-3-Clause — third_party_licenses/github.com/gorilla/handlers/LICENSE
+github.com/gorilla/mux v1.8.1 — BSD-3-Clause — third_party_licenses/github.com/gorilla/mux/LICENSE
+github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.2-0.20240212192251-757544f21357 — Apache-2.0 — third_party_licenses/github.com/grpc-ecosystem/go-grpc-middleware/v2/LICENSE
+github.com/hashicorp/errwrap v1.1.0 — unknown — third_party_licenses/github.com/hashicorp/errwrap/LICENSE
+github.com/hashicorp/go-cleanhttp v0.5.2 — unknown — third_party_licenses/github.com/hashicorp/go-cleanhttp/LICENSE
+github.com/hashicorp/go-multierror v1.1.1 — unknown — third_party_licenses/github.com/hashicorp/go-multierror/LICENSE
+github.com/hashicorp/go-retryablehttp v0.7.8 — unknown — third_party_licenses/github.com/hashicorp/go-retryablehttp/LICENSE
+github.com/hashicorp/go-secure-stdlib/base62 v0.1.2 — unknown — third_party_licenses/github.com/hashicorp/go-secure-stdlib/base62/LICENSE
+github.com/hashicorp/go-secure-stdlib/parseutil v0.2.0 — unknown — third_party_licenses/github.com/hashicorp/go-secure-stdlib/parseutil/LICENSE
+github.com/hashicorp/go-secure-stdlib/strutil v0.1.2 — unknown — third_party_licenses/github.com/hashicorp/go-secure-stdlib/strutil/LICENSE
+github.com/hashicorp/go-sockaddr v1.0.7 — MPL-2.0 — third_party_licenses/github.com/hashicorp/go-sockaddr/LICENSE
+github.com/hashicorp/go-uuid v1.0.3 — unknown — third_party_licenses/github.com/hashicorp/go-uuid/LICENSE
+github.com/hashicorp/go-version v1.7.0 — unknown — third_party_licenses/github.com/hashicorp/go-version/LICENSE
+github.com/hashicorp/hcl v1.0.1-vault-7 — unknown — third_party_licenses/github.com/hashicorp/hcl/LICENSE
+github.com/huandu/xstrings v1.5.0 — MIT — third_party_licenses/github.com/huandu/xstrings/LICENSE
+github.com/huin/goupnp v1.2.0 — BSD-2-Clause — third_party_licenses/github.com/huin/goupnp/LICENSE
+github.com/jackc/pgpassfile v1.0.0 — MIT — third_party_licenses/github.com/jackc/pgpassfile/LICENSE
+github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a — MIT — third_party_licenses/github.com/jackc/pgservicefile/LICENSE
+github.com/jackc/pgx/v5 v5.5.5 — MIT — third_party_licenses/github.com/jackc/pgx/v5/LICENSE
+github.com/jackc/puddle/v2 v2.2.1 — MIT — third_party_licenses/github.com/jackc/puddle/v2/LICENSE
+github.com/jackpal/go-nat-pmp v1.0.2 — unknown — third_party_licenses/github.com/jackpal/go-nat-pmp/LICENSE
+github.com/jinzhu/inflection v1.0.0 — MIT — third_party_licenses/github.com/jinzhu/inflection/LICENSE
+github.com/jinzhu/now v1.1.5 — MIT — third_party_licenses/github.com/jinzhu/now/License
+github.com/jmespath/go-jmespath v0.4.0 — unknown — third_party_licenses/github.com/jmespath/go-jmespath/LICENSE
+github.com/jonboulle/clockwork v0.5.0 — Apache-2.0 — third_party_licenses/github.com/jonboulle/clockwork/LICENSE
+github.com/kardianos/service v1.2.3-0.20240613133416-becf2eb62b83 — unknown — third_party_licenses/github.com/kardianos/service/LICENSE
+github.com/kelseyhightower/envconfig v1.4.0 — MIT — third_party_licenses/github.com/kelseyhightower/envconfig/LICENSE
+github.com/klauspost/compress v1.18.0 — Apache-2.0 AND BSD-3-Clause AND MIT — third_party_licenses/github.com/klauspost/compress/LICENSE
+github.com/klauspost/cpuid/v2 v2.2.10 — MIT — third_party_licenses/github.com/klauspost/cpuid/v2/LICENSE
+github.com/koron/go-ssdp v0.0.4 — MIT — third_party_licenses/github.com/koron/go-ssdp/LICENSE
+github.com/kr/fs v0.1.0 — BSD-3-Clause — third_party_licenses/github.com/kr/fs/LICENSE
+github.com/lib/pq v1.12.3 — MIT — third_party_licenses/github.com/lib/pq/LICENSE
+github.com/libdns/libdns v0.2.2 — MIT — third_party_licenses/github.com/libdns/libdns/LICENSE
+github.com/libdns/route53 v1.5.0 — MIT — third_party_licenses/github.com/libdns/route53/LICENSE
+github.com/libp2p/go-nat v0.2.0 — Apache-2.0 — third_party_licenses/github.com/libp2p/go-nat/LICENSE
+github.com/libp2p/go-netroute v0.4.0 — BSD-3-Clause — third_party_licenses/github.com/libp2p/go-netroute/LICENSE
+github.com/lrh3321/ipset-go v0.0.0-20250619021614-54a0a98ace81 — Apache-2.0 — third_party_licenses/github.com/lrh3321/ipset-go/LICENSE
+github.com/magiconair/properties v1.8.10 — BSD-2-Clause — third_party_licenses/github.com/magiconair/properties/LICENSE.md
+github.com/mattermost/xml-roundtrip-validator v0.1.0 — Apache-2.0 — third_party_licenses/github.com/mattermost/xml-roundtrip-validator/LICENSE.txt
+github.com/mattn/go-sqlite3 v1.14.42 — MIT — third_party_licenses/github.com/mattn/go-sqlite3/LICENSE
+github.com/mdelapenya/tlscert v0.2.0 — MIT — third_party_licenses/github.com/mdelapenya/tlscert/LICENSE
+github.com/mdlayher/genetlink v1.3.2 — MIT — third_party_licenses/github.com/mdlayher/genetlink/LICENSE.md
+github.com/mdlayher/netlink v1.7.3-0.20250113171957-fbb4dce95f42 — MIT — third_party_licenses/github.com/mdlayher/netlink/LICENSE.md
+github.com/mdlayher/socket v0.5.1 — MIT — third_party_licenses/github.com/mdlayher/socket/LICENSE.md
+github.com/mdp/qrterminal/v3 v3.2.1 — MIT — third_party_licenses/github.com/mdp/qrterminal/v3/LICENSE
+github.com/mholt/acmez/v2 v2.0.1 — Apache-2.0 — third_party_licenses/github.com/mholt/acmez/v2/LICENSE
+github.com/miekg/dns v1.1.72 — BSD-3-Clause — third_party_licenses/github.com/miekg/dns/AUTHORS, third_party_licenses/github.com/miekg/dns/LICENSE
+github.com/mitchellh/copystructure v1.2.0 — MIT — third_party_licenses/github.com/mitchellh/copystructure/LICENSE
+github.com/mitchellh/hashstructure/v2 v2.0.2 — MIT — third_party_licenses/github.com/mitchellh/hashstructure/v2/LICENSE
+github.com/mitchellh/mapstructure v1.5.0 — MIT — third_party_licenses/github.com/mitchellh/mapstructure/LICENSE
+github.com/mitchellh/reflectwalk v1.0.2 — MIT — third_party_licenses/github.com/mitchellh/reflectwalk/LICENSE
+github.com/moby/docker-image-spec v1.3.1 — Apache-2.0 — third_party_licenses/github.com/moby/docker-image-spec/LICENSE
+github.com/moby/patternmatcher v0.6.0 — Apache-2.0 — third_party_licenses/github.com/moby/patternmatcher/LICENSE, third_party_licenses/github.com/moby/patternmatcher/NOTICE
+github.com/moby/sys/sequential v0.5.0 — Apache-2.0 — third_party_licenses/github.com/moby/sys/sequential/LICENSE
+github.com/moby/sys/user v0.3.0 — Apache-2.0 — third_party_licenses/github.com/moby/sys/user/LICENSE
+github.com/moby/sys/userns v0.1.0 — Apache-2.0 — third_party_licenses/github.com/moby/sys/userns/LICENSE
+github.com/moby/term v0.5.2 — Apache-2.0 — third_party_licenses/github.com/moby/term/LICENSE
+github.com/morikuni/aec v1.0.0 — MIT — third_party_licenses/github.com/morikuni/aec/LICENSE
+github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 — BSD-3-Clause — third_party_licenses/github.com/munnerz/goautoneg/LICENSE
+github.com/netbirdio/management-integrations/integrations v0.0.0-20260416123949-2355d972be42 — LGPL-3.0-only AND GPL-3.0-only — third_party_licenses/github.com/netbirdio/management-integrations/integrations/LICENSE
+github.com/netbirdio/signal-dispatcher/dispatcher v0.0.0-20250805121659-6b4ac470ca45 — BSD-3-Clause — third_party_licenses/github.com/netbirdio/signal-dispatcher/dispatcher/LICENSE
+github.com/oapi-codegen/runtime v1.1.2 — Apache-2.0 — third_party_licenses/github.com/oapi-codegen/runtime/LICENSE
+github.com/okta/okta-sdk-golang/v2 v2.18.0 — Apache-2.0 — third_party_licenses/github.com/okta/okta-sdk-golang/v2/LICENSE.md, third_party_licenses/github.com/okta/okta-sdk-golang/v2/NOTICE.md
+github.com/openbao/openbao/api/v2 v2.5.1 — unknown — third_party_licenses/github.com/openbao/openbao/api/v2/LICENSE
+github.com/opencontainers/go-digest v1.0.0 — Apache-2.0 — third_party_licenses/github.com/opencontainers/go-digest/LICENSE, third_party_licenses/github.com/opencontainers/go-digest/LICENSE.docs
+github.com/opencontainers/image-spec v1.1.1 — Apache-2.0 — third_party_licenses/github.com/opencontainers/image-spec/LICENSE
+github.com/oschwald/maxminddb-golang v1.12.0 — ISC — third_party_licenses/github.com/oschwald/maxminddb-golang/LICENSE
+github.com/patrickmn/go-cache v2.1.0+incompatible — MIT — third_party_licenses/github.com/patrickmn/go-cache/LICENSE
+github.com/philhofer/fwd v1.2.0 — MIT — third_party_licenses/github.com/philhofer/fwd/LICENSE.md
+github.com/pion/dtls/v2 v2.2.10 — MIT — third_party_licenses/github.com/pion/dtls/v2/AUTHORS.txt, third_party_licenses/github.com/pion/dtls/v2/LICENSE
+github.com/pion/dtls/v3 v3.0.9 — MIT — third_party_licenses/github.com/pion/dtls/v3/LICENSE
+github.com/pion/ice/v4 v4.0.0-00010101000000-000000000000 — MIT — third_party_licenses/github.com/pion/ice/v4/LICENSE
+github.com/pion/logging v0.2.4 — MIT — third_party_licenses/github.com/pion/logging/LICENSE
+github.com/pion/mdns/v2 v2.0.7 — MIT — third_party_licenses/github.com/pion/mdns/v2/LICENSE
+github.com/pion/randutil v0.1.0 — MIT — third_party_licenses/github.com/pion/randutil/LICENSE
+github.com/pion/stun/v2 v2.0.0 — MIT — third_party_licenses/github.com/pion/stun/v2/AUTHORS.txt, third_party_licenses/github.com/pion/stun/v2/LICENSE
+github.com/pion/stun/v3 v3.1.0 — MIT — third_party_licenses/github.com/pion/stun/v3/LICENSE
+github.com/pion/transport/v2 v2.2.4 — MIT — third_party_licenses/github.com/pion/transport/v2/AUTHORS.txt, third_party_licenses/github.com/pion/transport/v2/LICENSE
+github.com/pion/transport/v3 v3.1.1 — MIT — third_party_licenses/github.com/pion/transport/v3/LICENSE
+github.com/pion/turn/v3 v3.0.1 — MIT — third_party_licenses/github.com/pion/turn/v3/AUTHORS.txt, third_party_licenses/github.com/pion/turn/v3/LICENSE
+github.com/pion/turn/v4 v4.1.1 — MIT — third_party_licenses/github.com/pion/turn/v4/LICENSE
+github.com/pkg/errors v0.9.1 — BSD-2-Clause — third_party_licenses/github.com/pkg/errors/LICENSE
+github.com/pkg/sftp v1.13.9 — BSD-2-Clause — third_party_licenses/github.com/pkg/sftp/LICENSE
+github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 — BSD-2-Clause — third_party_licenses/github.com/pmezard/go-difflib/LICENSE
+github.com/pquerna/otp v1.5.0 — Apache-2.0 — third_party_licenses/github.com/pquerna/otp/LICENSE, third_party_licenses/github.com/pquerna/otp/NOTICE
+github.com/prometheus/client_golang v1.23.2 — Apache-2.0 — third_party_licenses/github.com/prometheus/client_golang/LICENSE, third_party_licenses/github.com/prometheus/client_golang/NOTICE
+github.com/prometheus/client_model v0.6.2 — Apache-2.0 — third_party_licenses/github.com/prometheus/client_model/LICENSE, third_party_licenses/github.com/prometheus/client_model/NOTICE
+github.com/prometheus/common v0.67.5 — Apache-2.0 — third_party_licenses/github.com/prometheus/common/LICENSE, third_party_licenses/github.com/prometheus/common/NOTICE
+github.com/prometheus/otlptranslator v1.0.0 — Apache-2.0 — third_party_licenses/github.com/prometheus/otlptranslator/LICENSE
+github.com/prometheus/procfs v0.19.2 — Apache-2.0 — third_party_licenses/github.com/prometheus/procfs/LICENSE, third_party_licenses/github.com/prometheus/procfs/NOTICE
+github.com/quic-go/quic-go v0.55.0 — MIT — third_party_licenses/github.com/quic-go/quic-go/LICENSE
+github.com/redis/go-redis/v9 v9.7.3 — BSD-2-Clause — third_party_licenses/github.com/redis/go-redis/v9/LICENSE
+github.com/rs/cors v1.8.0 — MIT — third_party_licenses/github.com/rs/cors/LICENSE
+github.com/rs/xid v1.3.0 — MIT — third_party_licenses/github.com/rs/xid/LICENSE
+github.com/russellhaering/goxmldsig v1.6.0 — Apache-2.0 — third_party_licenses/github.com/russellhaering/goxmldsig/LICENSE
+github.com/ryanuber/go-glob v1.0.0 — MIT — third_party_licenses/github.com/ryanuber/go-glob/LICENSE
+github.com/shirou/gopsutil/v3 v3.24.4 — BSD-3-Clause — third_party_licenses/github.com/shirou/gopsutil/v3/LICENSE
+github.com/shirou/gopsutil/v4 v4.25.8 — BSD-3-Clause — third_party_licenses/github.com/shirou/gopsutil/v4/LICENSE
+github.com/shopspring/decimal v1.4.0 — MIT — third_party_licenses/github.com/shopspring/decimal/LICENSE
+github.com/sirupsen/logrus v1.9.4 — MIT — third_party_licenses/github.com/sirupsen/logrus/LICENSE
+github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966 — MIT — third_party_licenses/github.com/skratchdot/open-golang/LICENSE
+github.com/spf13/cast v1.7.0 — MIT — third_party_licenses/github.com/spf13/cast/LICENSE
+github.com/spf13/cobra v1.10.2 — Apache-2.0 — third_party_licenses/github.com/spf13/cobra/LICENSE.txt
+github.com/spf13/pflag v1.0.9 — BSD-3-Clause — third_party_licenses/github.com/spf13/pflag/LICENSE
+github.com/stretchr/testify v1.11.1 — MIT — third_party_licenses/github.com/stretchr/testify/LICENSE
+github.com/testcontainers/testcontainers-go v0.37.0 — MIT — third_party_licenses/github.com/testcontainers/testcontainers-go/LICENSE
+github.com/testcontainers/testcontainers-go/modules/mysql v0.37.0 — MIT — third_party_licenses/github.com/testcontainers/testcontainers-go/modules/mysql/LICENSE
+github.com/testcontainers/testcontainers-go/modules/postgres v0.37.0 — MIT — third_party_licenses/github.com/testcontainers/testcontainers-go/modules/postgres/LICENSE
+github.com/testcontainers/testcontainers-go/modules/redis v0.37.0 — MIT — third_party_licenses/github.com/testcontainers/testcontainers-go/modules/redis/LICENSE
+github.com/things-go/go-socks5 v0.0.4 — MIT — third_party_licenses/github.com/things-go/go-socks5/LICENSE
+github.com/ti-mo/conntrack v0.5.1 — MIT — third_party_licenses/github.com/ti-mo/conntrack/LICENSE
+github.com/ti-mo/netfilter v0.5.2 — MIT — third_party_licenses/github.com/ti-mo/netfilter/LICENSE
+github.com/tinylib/msgp v1.6.3 — MIT — third_party_licenses/github.com/tinylib/msgp/LICENSE
+github.com/tklauser/go-sysconf v0.3.15 — BSD-3-Clause — third_party_licenses/github.com/tklauser/go-sysconf/LICENSE
+github.com/tklauser/numcpus v0.10.0 — Apache-2.0 — third_party_licenses/github.com/tklauser/numcpus/LICENSE
+github.com/vishvananda/netlink v1.3.1 — Apache-2.0 — third_party_licenses/github.com/vishvananda/netlink/LICENSE
+github.com/vishvananda/netns v0.0.5 — Apache-2.0 — third_party_licenses/github.com/vishvananda/netns/LICENSE
+github.com/vmihailenco/msgpack/v5 v5.4.1 — BSD-2-Clause — third_party_licenses/github.com/vmihailenco/msgpack/v5/LICENSE
+github.com/vmihailenco/tagparser/v2 v2.0.0 — BSD-2-Clause — third_party_licenses/github.com/vmihailenco/tagparser/v2/LICENSE
+github.com/wlynxg/anet v0.0.5 — BSD-3-Clause — third_party_licenses/github.com/wlynxg/anet/LICENSE
+github.com/x448/float16 v0.8.4 — MIT — third_party_licenses/github.com/x448/float16/LICENSE
+github.com/zcalusic/sysinfo v1.1.3 — MIT — third_party_licenses/github.com/zcalusic/sysinfo/LICENSE
+github.com/zeebo/blake3 v0.2.3 — unknown — third_party_licenses/github.com/zeebo/blake3/LICENSE
+go.opentelemetry.io/auto/sdk v1.2.1 — Apache-2.0 — third_party_licenses/go.opentelemetry.io/auto/sdk/LICENSE
+go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.67.0 — Apache-2.0 AND BSD-3-Clause — third_party_licenses/go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc/LICENSE
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.67.0 — Apache-2.0 AND BSD-3-Clause — third_party_licenses/go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE
+go.opentelemetry.io/otel v1.43.0 — Apache-2.0 AND BSD-3-Clause — third_party_licenses/go.opentelemetry.io/otel/LICENSE
+go.opentelemetry.io/otel/exporters/prometheus v0.64.0 — Apache-2.0 AND BSD-3-Clause — third_party_licenses/go.opentelemetry.io/otel/exporters/prometheus/LICENSE
+go.opentelemetry.io/otel/metric v1.43.0 — Apache-2.0 AND BSD-3-Clause — third_party_licenses/go.opentelemetry.io/otel/metric/LICENSE
+go.opentelemetry.io/otel/sdk v1.43.0 — Apache-2.0 AND BSD-3-Clause — third_party_licenses/go.opentelemetry.io/otel/sdk/LICENSE
+go.opentelemetry.io/otel/sdk/metric v1.43.0 — Apache-2.0 AND BSD-3-Clause — third_party_licenses/go.opentelemetry.io/otel/sdk/metric/LICENSE
+go.opentelemetry.io/otel/trace v1.43.0 — Apache-2.0 AND BSD-3-Clause — third_party_licenses/go.opentelemetry.io/otel/trace/LICENSE
+go.uber.org/mock v0.6.0 — Apache-2.0 — third_party_licenses/go.uber.org/mock/AUTHORS, third_party_licenses/go.uber.org/mock/LICENSE
+go.uber.org/multierr v1.11.0 — MIT — third_party_licenses/go.uber.org/multierr/LICENSE.txt
+go.uber.org/zap v1.27.0 — MIT — third_party_licenses/go.uber.org/zap/LICENSE
+go.yaml.in/yaml/v2 v2.4.3 — Apache-2.0 AND MIT — third_party_licenses/go.yaml.in/yaml/v2/LICENSE, third_party_licenses/go.yaml.in/yaml/v2/LICENSE.libyaml, third_party_licenses/go.yaml.in/yaml/v2/NOTICE
+goauthentik.io/api/v3 v3.2023051.3 — LGPL-3.0-only AND GPL-3.0-only — third_party_licenses/goauthentik.io/api/v3/LICENSE
+golang.org/x/crypto v0.50.0 — BSD-3-Clause — third_party_licenses/golang.org/x/crypto/LICENSE, third_party_licenses/golang.org/x/crypto/PATENTS
+golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b — BSD-3-Clause — third_party_licenses/golang.org/x/exp/LICENSE, third_party_licenses/golang.org/x/exp/PATENTS
+golang.org/x/mod v0.34.0 — BSD-3-Clause — third_party_licenses/golang.org/x/mod/LICENSE, third_party_licenses/golang.org/x/mod/PATENTS
+golang.org/x/net v0.53.0 — BSD-3-Clause — third_party_licenses/golang.org/x/net/LICENSE, third_party_licenses/golang.org/x/net/PATENTS
+golang.org/x/oauth2 v0.36.0 — BSD-3-Clause — third_party_licenses/golang.org/x/oauth2/LICENSE
+golang.org/x/sync v0.20.0 — BSD-3-Clause — third_party_licenses/golang.org/x/sync/LICENSE, third_party_licenses/golang.org/x/sync/PATENTS
+golang.org/x/sys v0.43.0 — BSD-3-Clause — third_party_licenses/golang.org/x/sys/LICENSE, third_party_licenses/golang.org/x/sys/PATENTS
+golang.org/x/term v0.42.0 — BSD-3-Clause — third_party_licenses/golang.org/x/term/LICENSE, third_party_licenses/golang.org/x/term/PATENTS
+golang.org/x/text v0.36.0 — BSD-3-Clause — third_party_licenses/golang.org/x/text/LICENSE, third_party_licenses/golang.org/x/text/PATENTS
+golang.org/x/time v0.15.0 — BSD-3-Clause — third_party_licenses/golang.org/x/time/LICENSE, third_party_licenses/golang.org/x/time/PATENTS
+golang.zx2c4.com/wireguard v0.0.0-20231211153847-12269c276173 — MIT — third_party_licenses/golang.zx2c4.com/wireguard/LICENSE
+golang.zx2c4.com/wireguard/wgctrl v0.0.0-20241231184526-a9ab2273dd10 — MIT — third_party_licenses/golang.zx2c4.com/wireguard/wgctrl/LICENSE.md
+google.golang.org/api v0.276.0 — BSD-3-Clause — third_party_licenses/google.golang.org/api/AUTHORS, third_party_licenses/google.golang.org/api/LICENSE
+google.golang.org/genproto/googleapis/rpc v0.0.0-20260401024825-9d38bb4040a9 — Apache-2.0 — third_party_licenses/google.golang.org/genproto/googleapis/rpc/LICENSE
+google.golang.org/grpc v1.80.0 — Apache-2.0 — third_party_licenses/google.golang.org/grpc/AUTHORS, third_party_licenses/google.golang.org/grpc/LICENSE, third_party_licenses/google.golang.org/grpc/NOTICE.txt
+google.golang.org/protobuf v1.36.11 — BSD-3-Clause — third_party_licenses/google.golang.org/protobuf/LICENSE, third_party_licenses/google.golang.org/protobuf/PATENTS
+gopkg.in/square/go-jose.v2 v2.6.0 — Apache-2.0 — third_party_licenses/gopkg.in/square/go-jose.v2/LICENSE
+gopkg.in/yaml.v3 v3.0.1 — MIT — third_party_licenses/gopkg.in/yaml.v3/LICENSE, third_party_licenses/gopkg.in/yaml.v3/NOTICE
+gorm.io/driver/mysql v1.5.7 — MIT — third_party_licenses/gorm.io/driver/mysql/License
+gorm.io/driver/postgres v1.5.7 — MIT — third_party_licenses/gorm.io/driver/postgres/License
+gorm.io/driver/sqlite v1.5.7 — MIT — third_party_licenses/gorm.io/driver/sqlite/License
+gorm.io/gorm v1.25.12 — MIT — third_party_licenses/gorm.io/gorm/LICENSE
+gvisor.dev/gvisor v0.0.0-20260219192049-0f2374377e89 — Apache-2.0 AND BSD-3-Clause AND MIT — third_party_licenses/gvisor.dev/gvisor/AUTHORS, third_party_licenses/gvisor.dev/gvisor/LICENSE
+rsc.io/qr v0.2.0 — BSD-3-Clause — third_party_licenses/rsc.io/qr/LICENSE
+
+Third-party attribution notices
+===============================
+
+## github.com/aws/aws-sdk-go-v2 v1.38.3
+
+AWS SDK for Go
+Copyright 2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+Copyright 2014-2015 Stripe, Inc.
+
+## github.com/aws/smithy-go v1.23.0
+
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+## github.com/coreos/go-iptables v0.7.0
+
+CoreOS Project
+Copyright 2018 CoreOS, Inc
+
+This product includes software developed at CoreOS, Inc.
+(http://www.coreos.com/).
+
+## github.com/coreos/go-oidc/v3 v3.18.0
+
+CoreOS Project
+Copyright 2014 CoreOS, Inc
+
+This product includes software developed at CoreOS, Inc.
+(http://www.coreos.com/).
+
+## github.com/docker/docker v28.0.1+incompatible
+
+Docker
+Copyright 2012-2017 Docker, Inc.
+
+This product includes software developed at Docker, Inc. (https://www.docker.com).
+
+This product contains software (https://github.com/creack/pty) developed
+by Keith Rarick, licensed under the MIT License.
+
+The following is courtesy of our legal counsel:
+
+
+Use and transfer of Docker may be subject to certain restrictions by the
+United States and other governments.
+It is your responsibility to ensure that your use and/or transfer does not
+violate applicable laws.
+
+For more information, please see https://www.bis.doc.gov
+
+See also https://www.apache.org/dev/crypto.html and/or seek legal counsel.
+
+## github.com/moby/patternmatcher v0.6.0
+
+Docker
+Copyright 2012-2017 Docker, Inc.
+
+This product includes software developed at Docker, Inc. (https://www.docker.com).
+
+The following is courtesy of our legal counsel:
+
+
+Use and transfer of Docker may be subject to certain restrictions by the
+United States and other governments.
+It is your responsibility to ensure that your use and/or transfer does not
+violate applicable laws.
+
+For more information, please see https://www.bis.doc.gov
+
+See also https://www.apache.org/dev/crypto.html and/or seek legal counsel.
+
+## github.com/okta/okta-sdk-golang/v2 v2.18.0
+
+The Okta software accompanied by this notice is provided pursuant to the following terms:
+
+Copyright © 2018-Present, Okta, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0. Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+## github.com/pquerna/otp v1.5.0
+
+otp
+Copyright (c) 2014, Paul Querna
+
+This product includes software developed by 
+Paul Querna (http://paul.querna.org/).
+
+## github.com/prometheus/client_golang v1.23.2
+
+Prometheus instrumentation library for Go applications
+Copyright 2012-2015 The Prometheus Authors
+
+This product includes software developed at
+SoundCloud Ltd. (http://soundcloud.com/).
+
+
+The following components are included in this product:
+
+perks - a fork of https://github.com/bmizerany/perks
+https://github.com/beorn7/perks
+Copyright 2013-2015 Blake Mizerany, Björn Rabenstein
+See https://github.com/beorn7/perks/blob/master/README.md for license details.
+
+Go support for Protocol Buffers - Google's data interchange format
+http://github.com/golang/protobuf/
+Copyright 2010 The Go Authors
+See source code for license details.
+
+## github.com/prometheus/client_model v0.6.2
+
+Data model artifacts for Prometheus.
+Copyright 2012-2015 The Prometheus Authors
+
+This product includes software developed at
+SoundCloud Ltd. (http://soundcloud.com/).
+
+## github.com/prometheus/common v0.67.5
+
+Common libraries shared by Prometheus Go components.
+Copyright 2015 The Prometheus Authors
+
+This product includes software developed at
+SoundCloud Ltd. (http://soundcloud.com/).
+
+## github.com/prometheus/procfs v0.19.2
+
+procfs provides functions to retrieve system, kernel and process
+metrics from the pseudo-filesystem proc.
+
+Copyright 2014-2015 The Prometheus Authors
+
+This product includes software developed at
+SoundCloud Ltd. (http://soundcloud.com/).
+
+## go.yaml.in/yaml/v2 v2.4.3
+
+Copyright 2011-2016 Canonical Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+## google.golang.org/grpc v1.80.0
+
+Copyright 2014 gRPC authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+## gopkg.in/yaml.v3 v3.0.1
+
+Copyright 2011-2016 Canonical Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
