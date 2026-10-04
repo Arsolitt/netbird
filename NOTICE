@@ -174,7 +174,7 @@ github.com/netbirdio/dex/api/v2 v2.0.0-20260512110716-8d70ad8647c1 — Apache-2.
 github.com/netbirdio/go-nat v0.0.0-20260821095157-6b2c8c5c74e8 — Apache-2.0 — third_party_licenses/github.com/netbirdio/go-nat/LICENSE
 github.com/netbirdio/ice/v4 v4.0.0-20250908184934-6202be846b51 — MIT — third_party_licenses/github.com/netbirdio/ice/v4/LICENSE
 github.com/netbirdio/management-integrations/integrations v0.0.0-20260803100840-78e79ba20f87 — LGPL-3.0-only AND GPL-3.0-only — third_party_licenses/github.com/netbirdio/management-integrations/integrations/LICENSE
-github.com/netbirdio/service v0.0.0-20240911161631-f62744f42502 — unknown — third_party_licenses/github.com/netbirdio/service/LICENSE
+github.com/netbirdio/service v0.0.0-20240911161631-f62744f42502 — Zlib — third_party_licenses/github.com/netbirdio/service/LICENSE
 github.com/netbirdio/signal-dispatcher/dispatcher v0.0.0-20250805121659-6b4ac470ca45 — BSD-3-Clause — third_party_licenses/github.com/netbirdio/signal-dispatcher/dispatcher/LICENSE
 github.com/netbirdio/wireguard-go v0.0.0-20260914123147-8bf8fa968f1a — MIT — third_party_licenses/github.com/netbirdio/wireguard-go/LICENSE
 github.com/oapi-codegen/runtime v1.1.2 — Apache-2.0 — third_party_licenses/github.com/oapi-codegen/runtime/LICENSE

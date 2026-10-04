@@ -105,6 +105,7 @@ var licensePatterns = []licensePattern{
 	{spdx: "BSD-3-Clause", phrases: []string{"redistribution and use in source and binary forms", "neither the name"}},
 	{spdx: "BSD-2-Clause", phrases: []string{"redistribution and use in source and binary forms"}},
 	{spdx: "ISC", phrases: []string{"permission to use, copy, modify, and/or distribute this software"}},
+	{spdx: "Zlib", phrases: []string{"provided 'as-is', without any express or implied warranty", "altered source versions must be plainly marked as such"}},
 	{spdx: "MIT", phrases: []string{"permission is hereby granted, free of charge, to any person obtaining a copy"}},
 }
 
