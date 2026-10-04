@@ -1,0 +1,51 @@
+name: Fork CI
+
+# Gates for the fork release pipeline: the GoReleaser config must validate, and
+# the committed NOTICE / third_party_licenses bundle must match the module
+# graph of the binaries the fork releases.
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["**.md", "docs/**"]
+  pull_request:
+    branches: [main]
+    paths-ignore: ["**.md", "docs/**"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fork-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GORELEASER_VERSION: v2.18.1
+
+jobs:
+  release_config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: true
+      - uses: goreleaser/goreleaser-action@v7
+        with:
+          version: ${{ env.GORELEASER_VERSION }}
+          args: check --config .goreleaser.fork.yaml
+
+  licenses:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: true
+      - run: go mod download
+      - run: go run ./hack/noticegen
+      - name: NOTICE and third_party_licenses must be up to date
+        run: git diff --exit-code -- NOTICE third_party_licenses
