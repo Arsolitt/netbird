@@ -202,7 +202,10 @@ func run() error {
 // collectModules resolves the dependency graph of every released target and
 // unions the modules found into one map keyed by module path.
 func collectModules() (map[string]module, error) {
-	const format = "{{if .Module}}{{.Module.Path}}\t{{.Module.Version}}\t{{.Module.Dir}}{{end}}"
+	// Replaced modules are attributed to their resolved replacement — the
+	// fork the build actually links — not to the module path from go.mod
+	// requires (same rule as client/collect-licenses.sh).
+	const format = "{{if .Module}}{{if .Module.Replace}}{{.Module.Replace.Path}}\t{{.Module.Replace.Version}}\t{{.Module.Replace.Dir}}{{else}}{{.Module.Path}}\t{{.Module.Version}}\t{{.Module.Dir}}{{end}}{{end}}"
 
 	mods := make(map[string]module)
 	for _, t := range targets {
