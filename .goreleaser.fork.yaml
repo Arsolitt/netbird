@@ -1,0 +1,208 @@
+# GoReleaser configuration for the Arsolitt netbird fork.
+#
+# The upstream .goreleaser.yaml stays untouched for rebases; this config is the
+# fork's own release pipeline.
+#
+# Tag convention: vX.Y.Z for stable releases, vX.Y.Z-rc.N for prereleases
+# (`prerelease: auto` below classifies the -rc.N suffix automatically).
+#
+# Release:      git tag -s vX.Y.Z[-rc.N] -m "..." && git push origin vX.Y.Z[-rc.N]
+# Local check:  goreleaser check --config .goreleaser.fork.yaml
+# Local dry run (builds everything, publishes nothing):
+#               goreleaser release --snapshot --clean --config .goreleaser.fork.yaml
+version: 2
+
+project_name: netbird
+
+builds:
+  # Client ("peer") binary — the only artifact shipped as a raw release asset.
+  # Flags, tags and ldflags mirror the upstream client build so the fork binary
+  # behaves like an upstream one; linux/amd64 is the only released platform.
+  - id: netbird
+    dir: client
+    binary: netbird
+    env: [CGO_ENABLED=0]
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    tags:
+      - load_wgnt_from_rsrc
+    ldflags:
+      - -s -w -X github.com/netbirdio/netbird/version.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser
+    goos: [linux]
+    goarch: [amd64]
+
+  # Server binaries — image-only, never archived (referenced by dockers_v2).
+  # CGO is on for management and the combined server: the management store
+  # links mattn/go-sqlite3 through gorm. amd64 builds compile natively on the
+  # ubuntu-24.04 runner, so no cross C toolchain is needed.
+  - id: netbird-mgmt
+    dir: management
+    binary: netbird-mgmt
+    env: [CGO_ENABLED=1]
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    ldflags:
+      - -s -w -X github.com/netbirdio/netbird/version.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser
+    goos: [linux]
+    goarch: [amd64]
+
+  - id: netbird-signal
+    dir: signal
+    binary: netbird-signal
+    env: [CGO_ENABLED=0]
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    ldflags:
+      - -s -w -X github.com/netbirdio/netbird/version.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser
+    goos: [linux]
+    goarch: [amd64]
+
+  - id: netbird-relay
+    dir: relay
+    binary: netbird-relay
+    env: [CGO_ENABLED=0]
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    ldflags:
+      - -s -w -X github.com/netbirdio/netbird/version.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser
+    goos: [linux]
+    goarch: [amd64]
+
+  - id: netbird-server
+    dir: combined
+    binary: netbird-server
+    env: [CGO_ENABLED=1]
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    ldflags:
+      - -s -w -X github.com/netbirdio/netbird/version.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser
+    goos: [linux]
+    goarch: [amd64]
+
+archives:
+  # Raw binary, upstream-style asset name: netbird-linux-amd64.
+  - id: binaries
+    ids: [netbird]
+    formats: [binary]
+    name_template: "{{ .Binary }}-{{ .Os }}-{{ .Arch }}"
+
+  # Single license bundle attached to every release (binaries cannot carry
+  # files). LICENSES/ holds the repository's own AGPL/BSD texts, NOTICE and
+  # third_party_licenses/ the generated attribution bundle.
+  - id: licenses
+    meta: true
+    formats: [tar.gz]
+    name_template: "netbird-licenses_{{ .Version }}"
+    files:
+      - LICENSE
+      - LICENSES/**/*
+      - NOTICE
+      - third_party_licenses/**/*
+
+checksum:
+  name_template: checksums.txt
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-snapshot.{{ .ShortCommit }}"
+
+dockers_v2:
+  - id: netbird-management
+    ids: [netbird-mgmt]
+    dockerfile: release_files/docker/management.Dockerfile
+    images:
+      - ghcr.io/arsolitt/netbird-management
+    tags:
+      - "{{ .Version }}"
+      - "{{ if not .Prerelease }}latest{{ end }}"
+    platforms:
+      - linux/amd64
+    extra_files:
+      - NOTICE
+      - LICENSE
+      - LICENSES
+      - third_party_licenses
+    labels:
+      org.opencontainers.image.title: netbird-management
+      org.opencontainers.image.description: NetBird management server (Arsolitt fork)
+      org.opencontainers.image.source: "{{ .GitURL }}"
+      org.opencontainers.image.version: "{{ .Version }}"
+      org.opencontainers.image.revision: "{{ .FullCommit }}"
+      org.opencontainers.image.licenses: AGPL-3.0-only
+    sbom: false
+
+  - id: netbird-signal
+    ids: [netbird-signal]
+    dockerfile: release_files/docker/signal.Dockerfile
+    images:
+      - ghcr.io/arsolitt/netbird-signal
+    tags:
+      - "{{ .Version }}"
+      - "{{ if not .Prerelease }}latest{{ end }}"
+    platforms:
+      - linux/amd64
+    extra_files:
+      - NOTICE
+      - LICENSE
+      - LICENSES
+      - third_party_licenses
+    labels:
+      org.opencontainers.image.title: netbird-signal
+      org.opencontainers.image.description: NetBird signal server (Arsolitt fork)
+      org.opencontainers.image.source: "{{ .GitURL }}"
+      org.opencontainers.image.version: "{{ .Version }}"
+      org.opencontainers.image.revision: "{{ .FullCommit }}"
+      org.opencontainers.image.licenses: AGPL-3.0-only
+    sbom: false
+
+  - id: netbird-relay
+    ids: [netbird-relay]
+    dockerfile: release_files/docker/relay.Dockerfile
+    images:
+      - ghcr.io/arsolitt/netbird-relay
+    tags:
+      - "{{ .Version }}"
+      - "{{ if not .Prerelease }}latest{{ end }}"
+    platforms:
+      - linux/amd64
+    extra_files:
+      - NOTICE
+      - LICENSE
+      - LICENSES
+      - third_party_licenses
+    labels:
+      org.opencontainers.image.title: netbird-relay
+      org.opencontainers.image.description: NetBird relay server (Arsolitt fork)
+      org.opencontainers.image.source: "{{ .GitURL }}"
+      org.opencontainers.image.version: "{{ .Version }}"
+      org.opencontainers.image.revision: "{{ .FullCommit }}"
+      org.opencontainers.image.licenses: AGPL-3.0-only
+    sbom: false
+
+  - id: netbird-server
+    ids: [netbird-server]
+    dockerfile: release_files/docker/server.Dockerfile
+    images:
+      - ghcr.io/arsolitt/netbird-server
+    tags:
+      - "{{ .Version }}"
+      - "{{ if not .Prerelease }}latest{{ end }}"
+    platforms:
+      - linux/amd64
+    extra_files:
+      - NOTICE
+      - LICENSE
+      - LICENSES
+      - third_party_licenses
+    labels:
+      org.opencontainers.image.title: netbird-server
+      org.opencontainers.image.description: "NetBird all-in-one server: management, signal and relay (Arsolitt fork)"
+      org.opencontainers.image.source: "{{ .GitURL }}"
+      org.opencontainers.image.version: "{{ .Version }}"
+      org.opencontainers.image.revision: "{{ .FullCommit }}"
+      org.opencontainers.image.licenses: AGPL-3.0-only
+    sbom: false
+
+release:
+  prerelease: auto
+  make_latest: "{{ not .Prerelease }}"
+  footer: |
+    This is a fork of [netbirdio/netbird](https://github.com/netbirdio/netbird)
+    maintained by Arsolitt. The corresponding source for every binary and image
+    published here is this repository at the matching tag. Licensing follows the
+    upstream split: BSD-3-Clause for the client, AGPL-3.0-only for the server
+    components (see LICENSE). Third-party licenses: `netbird-licenses_{{ .Version }}.tar.gz`.
