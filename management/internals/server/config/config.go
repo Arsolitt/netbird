@@ -53,6 +53,8 @@ type Config struct {
 
 	StoreConfig StoreConfig
 
+	SCIMConfig *SCIMConfig
+
 	ReverseProxy ReverseProxy
 
 	AgentNetwork AgentNetwork
@@ -204,6 +206,12 @@ type AgentNetwork struct {
 	// prefill with). An explicitly configured path that fails to load
 	// fails startup; runtime reload errors keep the previous table.
 	PricingDefaultsFile string
+}
+
+// SCIMConfig configures the built-in SCIM 2.0 provisioning endpoint.
+type SCIMConfig struct {
+	Enabled bool
+	Token   string
 }
 
 // ReverseProxy contains reverse proxy configuration in front of management.

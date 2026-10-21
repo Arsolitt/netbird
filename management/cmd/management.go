@@ -201,6 +201,10 @@ func LoadMgmtConfig(ctx context.Context, mgmtConfigPath string) (*nbconfig.Confi
 		return nil, err
 	}
 
+	if loadedConfig.SCIMConfig != nil && loadedConfig.SCIMConfig.Enabled && loadedConfig.SCIMConfig.Token == "" {
+		return nil, fmt.Errorf("SCIMConfig.Token must be set when SCIM is enabled")
+	}
+
 	LogConfigInfo(loadedConfig)
 
 	if err := EnsureEncryptionKey(ctx, mgmtConfigPath, loadedConfig); err != nil {
@@ -362,6 +366,9 @@ func LogConfigInfo(cfg *nbconfig.Config) {
 	}
 	if cfg.Relay != nil {
 		log.Infof("Relay addresses: %v", cfg.Relay.Addresses)
+	}
+	if cfg.SCIMConfig != nil && cfg.SCIMConfig.Enabled {
+		log.Info("SCIM provisioning endpoint enabled")
 	}
 }
 
