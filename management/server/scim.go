@@ -25,17 +25,23 @@ const scimIntegrationType = "scim"
 var ErrSCIMGroupConflict = errors.New("group with the same name was issued via the API")
 
 // SCIMAccountID returns the account ID of the deployment. SCIM is only served
-// when exactly one account exists, so the value is resolved once and cached.
+// when exactly one account exists. The value is cached, but failures are not:
+// an empty deployment legitimately gains its first account on the initial
+// login, so a later call must re-resolve.
 func (am *DefaultAccountManager) SCIMAccountID(ctx context.Context) (string, error) {
-	am.scimAccountOnce.Do(func() {
-		accounts := am.Store.GetAllAccounts(ctx)
-		if len(accounts) != 1 {
-			am.scimAccountErr = fmt.Errorf("SCIM requires a single-account deployment, found %d accounts", len(accounts))
-			return
-		}
-		am.scimAccountID = accounts[0].Id
-	})
-	return am.scimAccountID, am.scimAccountErr
+	am.scimAccountMu.Lock()
+	defer am.scimAccountMu.Unlock()
+
+	if am.scimAccountID != "" {
+		return am.scimAccountID, nil
+	}
+
+	accounts := am.Store.GetAllAccounts(ctx)
+	if len(accounts) != 1 {
+		return "", fmt.Errorf("SCIM requires a single-account deployment, found %d accounts", len(accounts))
+	}
+	am.scimAccountID = accounts[0].Id
+	return am.scimAccountID, nil
 }
 
 // SCIMUpsertUser creates the user pre-login or reconciles it when it already
@@ -43,16 +49,15 @@ func (am *DefaultAccountManager) SCIMAccountID(ctx context.Context) (string, err
 // matches as its subject. SCIM is the source of truth for in-scope users, so
 // every call reconciles the blocked state from the active flag.
 func (am *DefaultAccountManager) SCIMUpsertUser(ctx context.Context, accountID, externalID, userName, email, displayName string, active bool) (*types.User, bool, error) {
-	if displayName == "" {
-		displayName = userName
-	}
-
 	existing, err := am.GetUserByID(ctx, externalID)
 	if err != nil {
 		if s, ok := status.FromError(err); !ok || s.Type() != status.NotFound {
 			return nil, false, err
 		}
 
+		if displayName == "" {
+			displayName = userName
+		}
 		created := &types.User{
 			Id:                   externalID,
 			AccountID:            accountID,

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/netbirdio/netbird/management/server/types"
 )
@@ -163,16 +162,6 @@ func toSCIMGroup(group *types.Group, memberUsers []*types.User) scimGroup {
 		DisplayName: group.Name,
 		Members:     members,
 	}
-}
-
-func (r scimUserRequest) displayName() string {
-	if r.DisplayName != "" {
-		return r.DisplayName
-	}
-	if r.Name == nil {
-		return ""
-	}
-	return strings.TrimSpace(r.Name.GivenName + " " + r.Name.FamilyName)
 }
 
 func (r scimGroupRequest) memberUserIDs() []string {

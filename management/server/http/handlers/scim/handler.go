@@ -210,7 +210,7 @@ func (h *handler) upsertUser(w http.ResponseWriter, r *http.Request, pathID stri
 		return
 	}
 
-	user, created, err := h.accountManager.SCIMUpsertUser(r.Context(), accountID, externalID, req.UserName, email, req.displayName(), active)
+	user, created, err := h.accountManager.SCIMUpsertUser(r.Context(), accountID, externalID, req.UserName, email, req.DisplayName, active)
 	if err != nil {
 		writeManagerError(w, err)
 		return
