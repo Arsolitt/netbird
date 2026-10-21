@@ -115,6 +115,10 @@ type DefaultAccountManager struct {
 
 	deletionHooksMu sync.RWMutex
 	deletionHooks   []account.DeletionHook
+
+	scimAccountOnce sync.Once
+	scimAccountID   string
+	scimAccountErr  error
 }
 
 var _ account.Manager = (*DefaultAccountManager)(nil)

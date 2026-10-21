@@ -733,6 +733,13 @@ func validateDeleteGroup(ctx context.Context, transaction store.Store, group *ty
 		}
 	}
 
+	return validateDeleteGroupLinks(ctx, transaction, group, flowGroups)
+}
+
+// validateDeleteGroupLinks reports every account entity that still references the
+// group, as a *GroupLinkError carrying the link description. It deliberately
+// carries no initiator logic so system-initiated flows can share it.
+func validateDeleteGroupLinks(ctx context.Context, transaction store.Store, group *types.Group, flowGroups []string) error {
 	if group.IsGroupAll() {
 		return status.Errorf(status.InvalidArgument, "deleting group ALL is not allowed")
 	}
