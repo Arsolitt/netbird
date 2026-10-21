@@ -50,6 +50,7 @@ import (
 	"github.com/netbirdio/netbird/management/server/http/handlers/peers"
 	"github.com/netbirdio/netbird/management/server/http/handlers/policies"
 	"github.com/netbirdio/netbird/management/server/http/handlers/routes"
+	"github.com/netbirdio/netbird/management/server/http/handlers/scim"
 	"github.com/netbirdio/netbird/management/server/http/handlers/setup_keys"
 	"github.com/netbirdio/netbird/management/server/http/handlers/users"
 	"github.com/netbirdio/netbird/management/server/http/middleware"
@@ -82,6 +83,13 @@ func NewAPIHandler(ctx context.Context, router *mux.Router, accountManager accou
 	// OAuth callback for proxy authentication
 	if err := bypass.AddBypassPath(types.ProxyCallbackEndpointFull); err != nil {
 		return nil, fmt.Errorf("failed to add bypass path: %w", err)
+	}
+	// SCIM provisioning endpoints authenticate with their own bearer token;
+	// path.Match's * does not cross /, so each depth needs its own pattern.
+	for _, pattern := range []string{"/api/scim/v2", "/api/scim/v2/*", "/api/scim/v2/*/*"} {
+		if err := bypass.AddBypassPath(pattern); err != nil {
+			return nil, fmt.Errorf("failed to add SCIM bypass path %s: %w", pattern, err)
+		}
 	}
 
 	if rateLimiter == nil {
@@ -130,6 +138,13 @@ func NewAPIHandler(ctx context.Context, router *mux.Router, accountManager accou
 	idp.AddEndpoints(accountManager, router)
 	if agentNetworkManager != nil {
 		agentnetworkhandlers.RegisterEndpoints(agentNetworkManager, router)
+	}
+	if scimConfig != nil && scimConfig.Enabled {
+		scimWriter, ok := accountManager.(scim.AccountWriter)
+		if !ok {
+			return nil, fmt.Errorf("account manager %T does not implement scim.AccountWriter", accountManager)
+		}
+		scim.AddEndpoints(scimWriter, router, scimConfig)
 	}
 	instance.AddEndpoints(instanceManager, accountManager, router)
 	instance.AddVersionEndpoint(instanceManager, router)

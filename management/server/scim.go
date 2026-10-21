@@ -151,7 +151,7 @@ func (am *DefaultAccountManager) scimSetGroupMembers(ctx context.Context, accoun
 // SCIMUpsertGroup creates the group, adopts a same-name jwt-issued group in
 // place (ID preserved so policies keep working), or reconciles the members of an
 // existing integration-issued group. A same-name api-issued group is refused
-// with ErrSCIMGroupConflict.
+// with ErrSCIMGroupConflict. The second return value reports a fresh creation.
 func (am *DefaultAccountManager) SCIMUpsertGroup(ctx context.Context, accountID, displayName string, memberUserIDs []string) (*types.Group, bool, error) {
 	existing, err := am.GetGroupByName(ctx, displayName, accountID, activity.SystemInitiator)
 	if err != nil {
@@ -174,7 +174,7 @@ func (am *DefaultAccountManager) SCIMUpsertGroup(ctx context.Context, accountID,
 		if err := am.scimSetGroupMembers(ctx, accountID, created.ID, memberUserIDs); err != nil {
 			return nil, false, err
 		}
-		return created, false, nil
+		return created, true, nil
 	}
 
 	switch existing.Issued {
@@ -191,7 +191,7 @@ func (am *DefaultAccountManager) SCIMUpsertGroup(ctx context.Context, accountID,
 		if err := am.scimSetGroupMembers(ctx, accountID, adopted.ID, memberUserIDs); err != nil {
 			return nil, false, err
 		}
-		return adopted, true, nil
+		return adopted, false, nil
 	case types.GroupIssuedIntegration:
 		if err := am.scimSetGroupMembers(ctx, accountID, existing.ID, memberUserIDs); err != nil {
 			return nil, false, err
