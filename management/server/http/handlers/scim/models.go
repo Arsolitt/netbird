@@ -109,6 +109,9 @@ type scimEmailRequest struct {
 }
 
 type scimUserRequest struct {
+	// Authentik echoes the stored id in PUT bodies; accepted and ignored, the
+	// request path is authoritative.
+	ID          string             `json:"id"`
 	Schemas     []string           `json:"schemas"`
 	UserName    string             `json:"userName"`
 	ExternalID  string             `json:"externalId"`
@@ -123,6 +126,10 @@ type scimMemberRequest struct {
 }
 
 type scimGroupRequest struct {
+	// Authentik sends its group pk as externalId and echoes the stored id in
+	// PUT bodies; both accepted and ignored, the request path is authoritative.
+	ID          string              `json:"id"`
+	ExternalID  string              `json:"externalId"`
 	Schemas     []string            `json:"schemas"`
 	DisplayName string              `json:"displayName"`
 	Members     []scimMemberRequest `json:"members"`

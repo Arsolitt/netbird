@@ -404,6 +404,34 @@ func TestUpsertGroup(t *testing.T) {
 	assertSCIMErrorEnvelope(t, recorder)
 }
 
+func TestAuthentikPayloadTolerated(t *testing.T) {
+	writer := newStubWriter()
+	srv := newTestServer(writer, true)
+	defer srv.Close()
+
+	// Authentik always sends its group pk as externalId on creates and echoes
+	// the stored id in PUT bodies for both users and groups.
+	groupCreate := `{"schemas":["urn:ietf:params:scim:schemas:core:2.0:Group"],"displayName":"authentik-grp","externalId":"0f1e2d3c-4b5a-6789-8012-3456789abcde","members":[{"value":"user-a"}]}`
+	recorder := doRequest(t, srv, http.MethodPost, "/scim/v2/Groups", testToken, groupCreate)
+	require.Equal(t, http.StatusCreated, recorder.Code)
+	var group map[string]any
+	require.NoError(t, json.Unmarshal(recorder.Body.Bytes(), &group))
+	assert.Equal(t, "grp-new-authentik-grp", group["id"])
+
+	groupPut := `{"schemas":["urn:ietf:params:scim:schemas:core:2.0:Group"],"id":"grp-int","displayName":"from-integration","externalId":"0f1e2d3c-4b5a-6789-8012-3456789abcde","members":[{"value":"user-b"}]}`
+	recorder = doRequest(t, srv, http.MethodPut, "/scim/v2/Groups/grp-int", testToken, groupPut)
+	require.Equal(t, http.StatusOK, recorder.Code)
+	require.NoError(t, json.Unmarshal(recorder.Body.Bytes(), &group))
+	assert.Equal(t, "grp-int", group["id"])
+
+	userPut := `{"schemas":["urn:ietf:params:scim:schemas:core:2.0:User"],"id":"user-a","userName":"user-a","active":false}`
+	recorder = doRequest(t, srv, http.MethodPut, "/scim/v2/Users/user-a", testToken, userPut)
+	require.Equal(t, http.StatusOK, recorder.Code)
+	var user map[string]any
+	require.NoError(t, json.Unmarshal(recorder.Body.Bytes(), &user))
+	assert.Equal(t, false, user["active"])
+}
+
 func TestGroupMembersAlwaysPresent(t *testing.T) {
 	writer := newStubWriter()
 	srv := newTestServer(writer, true)
